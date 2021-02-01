@@ -1,0 +1,26 @@
+//Jquery
+
+   $(function () {
+      var x = 1; //initialize counter for text box
+      $('.add_more_button').click(function (e) { //click event on add more fields button having class add_more_button
+        e.preventDefault();
+        var t = $(this).attr('id');
+        console.log(t);
+        x++; //counter increment
+        $('.input_fields_container' + t).append('<div class="ans" style="margin-top: 10px; width: 100%; float: left;"><input type="text" class="form-control col-sm-6 answer-field" name="add_field[i]"/ style="float: left;"><button class="remove_field btn-danger" style="float: left; margin-left: 5px;" ><i class="fa fa-minus-circle" aria-hidden="true"  ></i></button></div>'); //add input field
+      });
+      $(document).on("click", '.remove_field', function (e) { //user click on remove text links        
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+      });
+    });
+
+
+//HTML
+
+
+                                            <div class="input_fields_container{{i}}">
+
+                                                <div class="ans"><input type="text" class="form-control col-sm-6 answer-field"><button class="btn btn-sm btn-success add_more_button" data-id="{{i}}" name="add_field"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                                    <br>
+                                                </div>
+                                            </div>
