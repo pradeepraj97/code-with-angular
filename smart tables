@@ -114,12 +114,11 @@ export class MasterFunctionComponent implements OnInit {
  function: any;
 
  public Function: Array<any> = [
-  {id: 1, func: 'Claims', description: ' ' },
-    {id: 2, func: 'CLCSA', description: ' '},
-    {id: 3, func: 'Collection', description: ' '},
-    {id: 4, func: 'Finance', description: ' ' },
-    {id: 5, func: 'Group Sales', description: ' '},
-    {id: 6, func: 'IT', description: ' '},
+  {id: 1, func: 'one', description: ' ' },
+    {id: 2, func: 'two', description: ' '},
+    {id: 3, func: 'three', description: ' '},
+    {id: 4, func: 'four', description: ' ' },
+   
 ];
  
 
