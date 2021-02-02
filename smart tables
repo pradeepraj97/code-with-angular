@@ -1,0 +1,152 @@
+//function html file
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-header">
+      <h4>Function Master</h4>
+    </div>
+    <div class="card-body">
+      <table class=" table  table-bordered">
+        <thead>
+          <tr class="header">
+            <th>Function</th>
+            <th>Description</th>
+            <th *ngIf="addSet==true ||  editAccess==1 || addAccess==1 ">Option</th>
+          </tr>
+          <tr>
+            <th><span><input fieldsize="small" fullwidth="" nbinput="" [(ngModel)]="search.function"
+                  placeholder="Search Function Type" type="text"
+                  class="input-full-width input-sm input-rectangle form-control"></span>
+            </th>
+            <th><span><input _ngcontent-c60="" fieldsize="small" fullwidth="" nbinput=""
+                  [(ngModel)]="search.description" placeholder="Search Description" type="text"
+                  class="input-full-width input-sm input-rectangle form-control"></span>
+            </th>
+            <th [hidden]="addAccess==0 && editAccess==0" style="position:relative; text-align: center;">
+              <button [hidden]="addAccess==0" type="button" (click)="onadd()" class="btn btn-success btn-xs "><span
+                  class="fa fa-plus-circle" style="font-size: 20px;
+                            font-weight: bolder;"></span></button>
+
+
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="addSet==true" [style.backgroundColor]="addSet==true ? '#e6f3ff':''">
+            <td><span>
+                <input _ngcontent-c60="" fieldsize="small" fullwidth="" nbinput="" [(ngModel)]="data.function"
+                  type="text" class="input-full-width input-sm input-rectangle form-control">
+              </span></td>
+            <td><span>
+                <input _ngcontent-c60="" fieldsize="small" fullwidth="" nbinput="" [(ngModel)]="data.description"
+                  type="text" class="input-full-width input-sm input-rectangle form-control">
+
+              </span>
+            </td>
+            <td *ngIf="addSet==true" style="position:relative; text-align: center;">
+              <a [hidden]="!data.function || !data.description" (click)="onSave(data)"><i
+                  class="fa fa-check btn btn-primary"></i></a>
+              <a *ngIf="!data.function || !data.description"><i class="fa fa-check btn btn-primary disabled"></i></a>
+              <a (click)="onaddCancel()"><i class="fa fa-window-close btn btn-primary"></i></a>
+            </td>
+          </tr>
+          <tr
+            *ngFor="let fun of Function | filterBy:search  | paginate: { itemsPerPage: 5, currentPage: p }; let i=index;"
+            [style.backgroundColor]="selectedType==fun ? '#e6f3ff':''">
+            <td><span *ngIf="selectedType==fun"><input _ngcontent-c60="" fieldsize="small" fullwidth="" nbinput=""
+                  [(ngModel)]="fun.function" type="text" class="input-full-width input-sm input-rectangle form-control"></span>
+              <span [hidden]="selectedType==fun">{{fun.function}}</span>
+            </td>
+            <td><span *ngIf="selectedType==fun"><input _ngcontent-c60="" fieldsize="small" fullwidth="" nbinput=""
+                  [(ngModel)]="fun.description" type="text"
+                  class="input-full-width input-sm input-rectangle form-control"></span><span
+                [hidden]="selectedType==fun">{{fun.description}}</span>
+            </td>
+            <td [hidden]="addAccess==0 && editAccess==0 || selectedType==fun"
+              style="position:relative; text-align: center;">
+              <a [hidden]="selectedType==fun" (click)="onEdit(fun)" [hidden]="editAccess==0"><i
+                  class="fa fa-pencil btn btn-primary" style="font-size: 15px;
+                 "></i></a>
+            </td>
+            <td [hidden]="addAccess==0 && editAccess==0  || selectedType!=fun"
+              style="position:relative; text-align: center;">
+              <a [hidden]="!fun.function || !fun.description" (click)="onSave(fun)"><i
+                  class="fa fa-check btn btn-primary"></i></a>
+              <a *ngIf="!fun.function || !fun.description"><i class="fa fa-check btn btn-primary disabled"></i></a>
+              <a (click)="onCancel()"><i class="fa fa-window-close btn btn-primary"></i></a>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h4 [hidden]="Function.length!=0 || addSet==true" class="text-center" style="color: blue;">No Data Found</h4>
+      <div class="pagination justify-content-end">
+        <pagination-controls directionLinks="true" maxsize="5" (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+///function TS file
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-master',
+  templateUrl: './masterfunction.component.html',
+  styleUrls: ['./master.component.css'],
+})
+export class MasterFunctionComponent implements OnInit {
+  search: any = {};
+  data: any = {};
+  selectedType: any;
+  addSet: boolean;
+  p: number = 1;
+  q: number = 1;
+  editAccess: any;
+  downloadAccess: any;
+  addAccess: any;
+  dataflag: any;
+  categoryList: any;
+ function: any;
+
+ public Function: Array<any> = [
+  {id: 1, func: 'Claims', description: ' ' },
+    {id: 2, func: 'CLCSA', description: ' '},
+    {id: 3, func: 'Collection', description: ' '},
+    {id: 4, func: 'Finance', description: ' ' },
+    {id: 5, func: 'Group Sales', description: ' '},
+    {id: 6, func: 'IT', description: ' '},
+];
+ 
+
+ 
+
+  ngOnInit(): void {
+   
+    this.editAccess = 1;
+    this.downloadAccess = 0;
+    this.addAccess = 1;
+   
+  }
+  onadd(): void {
+    this.selectedType = null;
+    this.addSet = true;
+    this.data = {};
+  }  
+  onEdit(type: any): void {
+    this.selectedType = type;
+    this.addSet = false;
+  }
+  onaddCancel(): void {
+    this.addSet = false;
+  }
+  onCancel(){
+    this.selectedType = null;
+    
+  }
+
+}
