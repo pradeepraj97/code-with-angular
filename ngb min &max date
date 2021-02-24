@@ -1,0 +1,36 @@
+//Min Date HTML
+
+ <input class="form-control" ngbDatepicker [minDate]="minDate" (click)="datePicker.toggle()" #datePicker="ngbDatepicker" placeholder="yyyy-mm-dd">
+ 
+ //Min Date TS File
+
+  minDate = undefined;
+  
+    constructor(private config: NgbDatepickerConfig) {
+    const current = new Date();
+
+    this.maxDate = {
+      year: current.getFullYear(),
+      month: current.getMonth() + 1,
+      day: current.getDate()
+    };
+  }
+ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //Max Date HTML
+
+ <input class="form-control" ngbDatepicker [maxDate]="maxDate" (click)="datePicker.toggle()" #datePicker="ngbDatepicker" placeholder="yyyy-mm-dd">
+ 
+ //Max Date TS File
+
+  maxDate = undefined;
+  
+    constructor(private config: NgbDatepickerConfig) {
+    const current = new Date();
+
+    this.maxDate = {
+      year: current.getFullYear(),
+      month: current.getMonth() + 1,
+      day: current.getDate()
+    };
+  }
+  
