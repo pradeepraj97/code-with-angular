@@ -1,0 +1,73 @@
+//HTML
+
+ <div class="card-body">
+        <div class="page-header">
+          <h2>Timeline </h2>
+        </div>
+        <div class="timeline">
+          <div class="line text-success"></div>
+          <div class="separator text-primary">
+            <time>26. 3. 2015</time>
+            <p>First Remarks</p>
+          </div>
+          <div class="separator text-primary">
+            <time>27. 3. 2015</time>
+            <p>Second remarks</p>
+          </div>
+          <div class="separator text-primary">
+            <time>26. 3. 2015</time>
+            <p>Third Remarks</p>
+          </div>
+          <div class="separator text-primary">
+            <time>27. 3. 2015</time>
+            <p>Fourth Remarks</p>
+        </div>
+      </div>
+  </div>
+      
+  //CSS
+    
+       /* timeline */
+ .timeline {
+  position: relative;
+  padding: 21px 0px 10px;
+  margin-top: 4px;
+  margin-bottom: 30px;
+}
+
+.timeline .line {
+  position: absolute;
+  width: 4px;
+  display: block;
+  background: currentColor;
+  top: 0px;
+  bottom: 0px;
+  margin-left: 30px;
+}
+
+.timeline .separator {
+  border-top: 1px solid currentColor;
+  padding: 5px;
+  padding-left: 40px;
+  font-style: italic;
+  font-size: 1.3em;
+  margin-left: 30px;
+}
+
+.timeline .line::before { top: -4px; }
+.timeline .line::after { bottom: -4px; }
+.timeline .line::before,
+.timeline .line::after {
+  content: '';
+  position: absolute;
+  left: -4px;
+  width: 12px;
+  height: 12px;
+  display: block;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+ 
+
+ 
