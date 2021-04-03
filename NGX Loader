@@ -1,0 +1,23 @@
+//HTML
+
+<ngx-spinner   bdColor = "rgba(0, 3, 0, 0.8)" size = "large" color = "# " type = "line-spin-fade" [fullScreen] = "true"><p style="color: rgb(253, 246, 246)" > Please Wait Loading... </p></ngx-spinner>
+
+//TS File
+
+import { NgxSpinnerService } from "ngx-spinner";
+
+ constructor(private spinner: NgxSpinnerService) {}
+      ngOnInit() {
+    this.heading = 'Template View';
+    this.spinner.show();
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinner.hide();
+    }, 5000);
+  }
+  
+  
+  //App.Module
+  import { NgxSpinnerModule } from "ngx-spinner";
+  
+ NgxSpinnerModule
