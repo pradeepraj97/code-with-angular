@@ -1,0 +1,50 @@
+ <div class="container ml-4">
+                    <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+                        <div class="col">
+                            <div class="input-group border bg-light">
+                                <div class="input-group-text text-dark">Select Year</div>
+                                <select class='form-control text-dark' [(ngModel)]="historyAuditYear"
+                                    (change)="getData(historyAuditYear)">
+                                    <option *ngFor="let year of planYear" [value]=year>{{year}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group  border bg-light">
+                                <div class="input-group-text text-dark">Select Month</div>
+                                <select name="month" id="month" class="form-control text-dark" [(ngModel)]="search.month">
+                                    <option value=''>All</option>
+                                    <option value="JANUARY">JANUARY</option>
+                                    <option value="FEBRUARY">FEBRUARY</option>
+                                    <option value="MARCH">MARCH</option>
+                                    <option value="APRIL">APRIL</option>
+                                    <option value="MAY">MAY</option>
+                                    <option value="JUNE">JUNE</option>
+                                    <option value="JULY">JULY</option>
+                                    <option value="AUGUST">AUGUST</option>
+                                    <option value="SEPTEMBER">SEPTEMBER</option>
+                                    <option value="OCTOBER">OCTOBER</option>
+                                    <option value="NOVEMBER">NOVEMBER</option>
+                                    <option value="DECEMBER">DECEMBER</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group  border bg-light">
+                                <div class="input-group-text text-dark">Select Month</div>
+                                <select class="form-control text-dark" name="department" id="department" 
+                                    [(ngModel)]="search.department">
+                                    <option value=''>All</option>
+                                    <option *ngFor="let i of dept" [value]="i.departmentName">{{i.departmentName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-success" [routerLink]="['/risk/add']"
+                                [disabled]="status >= 1 && show || accessControl.addAccess==0"><i
+                                    class="fa fa-plus-square"></i>&nbsp; Add
+                            </button>
+                        </div>
+                  </div>
+                </div>
