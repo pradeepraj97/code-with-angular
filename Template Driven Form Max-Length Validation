@@ -1,7 +1,7 @@
 
 //HTML
 <textarea class="form-control " [(ngModel)]="yourngModelName" rows="1" maxlength="255" name="rtResponse" #idName="ngModel"></textarea>
- <div *ngIf="idName.value?.length >=255"><span class="limit-exceed-message"> Maximum Limit Exceed</span> </div>
+ <div *ngIf="idName.value?.length >=254"><span class="limit-exceed-message"> Maximum Limit Exceed</span> </div>
                                     
   //CSS
  .limit-exceed-message {
