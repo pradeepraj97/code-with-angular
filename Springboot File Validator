@@ -1,0 +1,22 @@
+//Controller
+
+ public ResponseEntity<FileMessage> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id")) {
+        String message = "";
+        try {
+            String fileExtensions = ".xlsx,.pdf,.docx";
+            String fileName = file.getOriginalFilename();
+            int lastIndex = fileName.lastIndexOf('.');
+            String substring = fileName.substring(lastIndex);
+            if (!fileExtensions.contains(substring.toLowerCase())) {
+                message = "Invalid File Type: " + file.getOriginalFilename();
+                return ResponseEntity.ok(new FileMessage(message, "Failed"));
+            } else {
+                service.uploadFile(file, id);
+                message = "Uploaded the file successfully";
+                return ResponseEntity.ok(new FileMessage(message, "Success"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
