@@ -1,0 +1,11 @@
+    
+    let extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+    if(extension =="pdf" || extension=="docx"|| extension=="xlsx")
+    {
+        return true;
+    }
+    else
+    {
+        alert("In-Valid File Type");
+        return false;
+    }
