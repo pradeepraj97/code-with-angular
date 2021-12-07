@@ -1,0 +1,8 @@
+//HTML
+<textarea class="form-control" type="text" formControlName="txtArea" rows="1"(keyup)="textAreaAutoHieghtIncrease($event)"></textarea>
+
+//Type-Script
+  textAreaAutoHieghtIncrease(txt) {
+    txt.target.style.height = '0px';
+    txt.target.style.height = (txt.target.scrollHeight + 25) + 'px';
+  }
