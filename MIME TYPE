@@ -1,0 +1,55 @@
+//Type Script
+uploadFiles() {
+    for (let i = 0; i < this.fileList.length; i++) {
+      this.formData = new FormData;
+      this.file = this.fileList[i];
+      const fileSize = this.fileList[i].size;
+      const fileName = this.fileList[i].name;
+      const fileType = this.fileList[i].type;
+      const fileSizeInKB = Math.round(fileSize / 1024);
+      this.formData.set('file', this.file);
+      this.formData.set('id', this.id);
+      console.log(fileSizeInKB);
+      if (fileSizeInKB >= 20000) {
+        this.notify.showError('File is too large...Over 20MB', '');
+      } else {
+        this.restService.postModelWithFile(this.formData, '/Upload/Files').subscribe(data => {
+          console.log(data.statusMessage);
+          if (data.statusMessage === 'Success') {
+            this.notify.showSuccess('File Uploaded Successfully!!', '');
+            this.evidenceModal.hide();
+          } else {
+            this.notify.showError('Invalid File Type', '');
+            this.evidenceModal.hide();
+          }
+        });
+      }
+    }
+    this.listOfFiles = [];
+    this.fileList = null;
+  }
+  
+  //Springboot
+   @PostMapping(value = "/upload/files")
+    public ResponseEntity<FileMessage> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id") String fileId) {
+        String mimeType = "";
+        try {
+            mimeType = new MimetypesFileTypeMap().getContentType(file.getOriginalFilename());
+            System.out.println(mimeType);
+            if (mimeType.equals("application/vnd.ms-excel") ||mimeType.equals("application/octet-stream")
+                    || mimeType.equals("text/csv") || mimeType.equals("application/pdf")
+                    || mimeType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                    || mimeType.equals("text/plain")
+                    || mimeType.equals("application/vnd.openxmlformats-officedocument.presentationml.presentation")) {
+                mimeType = "Uploaded the file successfully";
+                service.uploadFile(file, fileId);
+                return ResponseEntity.ok(new FileMessage(mimeType, "Success"));
+            } else {
+                mimeType = "Invalid File Type: " + file.getOriginalFilename();
+                return ResponseEntity.ok(new FileMessage(mimeType, "Failed"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
