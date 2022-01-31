@@ -1,0 +1,29 @@
+//HTML
+
+<input type="file" enctype="multipart/form-data" multiple id="attach" name="filename" class="form-control" (change)="handleFileInput($event.target.files)">
+                                        
+  <div class="col-12 *ngIf="url">
+  <img [src]="url">
+   </div>
+ //Typescript
+ #Properties
+   fileList: FileList;
+  files: File;
+  url: any;
+  #Methods
+   handleFileInput(files: FileList) {
+    const fileName = files[0].name;
+    const extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+    if (extension == 'pdf' || extension == 'docx' || extension == 'xlsx' || extension == 'csv' ||
+      extension == 'txt' || extension == 'pptx' || extension == 'png') {
+      this.fileList = files;
+      let reader = new FileReader();
+      reader.onload = (event: any) => {
+        this.url = event.target.result;
+        console.log(this.url);
+      }
+      reader.readAsDataURL(files[0]);
+    } else {
+      this.notifyService.showError('In-Valid File Type!!', '');
+      return false;
+    }
