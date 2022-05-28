@@ -1,0 +1,40 @@
+//NPM Install
+npm i xlsx
+//HTML5
+ <div class="col-sm-3 form-group">
+ <label>Excel Upload </label>
+ <input type="file" class="form-control" #takeInput name="filename"
+ (change)="uploadExcel($event)" placeholder="Upload file"
+ accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+      </div>
+ <div class="col-sm-3 form-group" *ngIf="transactionStatus > 1">
+  <br>
+  <button class="btn btn-primary fa fa-eye mt-2" (click)="viewPayee()">&nbsp;View
+   Excel Data</button>
+  </div>
+
+/Type Script
+//Property
+  public excelFile: File;
+  public arrayBuffer: any;
+  public excelList: any;
+  public readerArrayList: any = [];
+
+uploadExcel(event) {
+    this.readerArrayList = [];
+    this.excelFile = event.target.files[0];
+    const fileReader = new FileReader();
+    fileReader.readAsArrayBuffer(this.excelFile);
+    fileReader.onload = (e) => {
+      this.arrayBuffer = fileReader.result;
+      const data = new Uint8Array(this.arrayBuffer);
+      const arr = new Array();
+      // tslint:disable-next-line: curly
+      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+      const bstr = arr.join('');
+      const workbook = XLSX.read(bstr, { type: 'binary' });
+      const first_sheet_name = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[first_sheet_name];
+      this.readerArrayList = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+    };
+  }
