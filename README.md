@@ -1,1 +1,1 @@
-# Functions
+# Angular Important Methods
