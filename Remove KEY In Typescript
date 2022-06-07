@@ -1,0 +1,12 @@
+this.restService.model(`/test/responseArrayList`).subscribe(data => {
+      this.responseList = data;
+      if (this.responseList) {
+        this.responseList.forEach((value) => {
+          if (value.status) {
+            delete value.status;
+          }
+        });
+      }
+      console.log('responseList', this.responseList);
+      this.arrayList = this.responseList.map(Object.values);
+    });
