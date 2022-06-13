@@ -1,0 +1,20 @@
+//HTML
+<input type="text" class="form-control"(keydown)="addHyphen($event.target.value,i)" maxlength="10" placeholder="dd-mm-yyyy">
+
+//TS
+    addHyphen(value, i) {
+        let trimmed = value.replace(/\s+/g, '');
+        if (trimmed.length > 10) {
+            trimmed = trimmed.substr(0, 10);
+        }
+        trimmed = trimmed.replace(/-/g, '');
+        let numbers = [];
+        numbers.push(trimmed.substr(0, 2));
+        if (trimmed.substr(2, 2) !== "")
+            numbers.push(trimmed.substr(2, 2));
+        if (trimmed.substr(4, 4) != "")
+            numbers.push(trimmed.substr(4, 4));
+        value = numbers.join('-');
+        const control = <FormArray>this.VoucherFormGroup.controls['invoiceDetails'];
+        control.at(i).get('invoiceDate').setValue(value);
+    }
