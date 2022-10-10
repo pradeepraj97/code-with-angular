@@ -1,0 +1,35 @@
+//html
+
+ <   <div class="col-sm-2">
+                            <div class="form-group">
+                                <label>Select Date</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="MM-YYYY"
+                                        [(ngModel)]="selectedDate" bsDatepicker #am="bsDatepicker"
+                                        [bsConfig]="{ showWeekNumbers:false , dateInputFormat: 'MM/YYYY',minMode:'month', adaptivePosition:true}"
+                                       (ngModelChange)="getFinancialYear(selectedDate)"
+                                        readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-success  fa fa-calendar" (click)="am.toggle()"
+                                            type="button"></button>
+                                    </div>
+               </div>
+    </div>
+  </div>
+                        
+                        
+                        
+ //ts file
+ 
+    getFinancialYear(selectedDate) {
+    const date = new Date(selectedDate);
+    this.financialYear = "";
+    this.quarter = "";
+    this.quarter = Math.floor(date.getMonth() / 3 + 1);
+    if ((date.getMonth() + 1) <= 3) {
+      this.financialYear = (date.getFullYear() - 1) + "-" + date.getFullYear()
+    } else {
+      this.financialYear = date.getFullYear() + "-" + (date.getFullYear() + 1)
+    }
+    this.financialYear;
+  }
