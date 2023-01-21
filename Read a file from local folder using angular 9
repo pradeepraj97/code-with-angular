@@ -1,0 +1,15 @@
+//Types Script 
+import * as fs from 'fs';
+
+  files: string[];
+
+  constructor() {
+    fs.readdir('./src/assets', (err, files) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      this.files = files;
+    });
+  }
+
