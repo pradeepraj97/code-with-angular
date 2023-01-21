@@ -13,3 +13,14 @@ import * as fs from 'fs';
     });
   }
 
+//Delete
+
+  deleteFile(fileName: string) {
+    fs.unlink(`./src/assets/${fileName}`, (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log(`${fileName} was deleted`);
+    });
+  }
