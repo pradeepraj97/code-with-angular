@@ -1,0 +1,16 @@
+//In Your HTML Code
+ <table class="table table-bordered custom-first-thead table-hover">
+            <thead>
+                <tr>
+<th>Background Color Shows Based On Your Custom Class Configuration</th>
+                </tr>
+            </thead>
+</table>
+//In Your Custom CSS
+table.custom-first-thead.table-bordered>thead>tr:first-child>th {
+  // background-color: #000000;
+  // background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
+  background-color: #2d3436;
+background-image: linear-gradient(315deg, #2d3436 0%, #2e2e2e 74%);
+  color: #fff;
+}
