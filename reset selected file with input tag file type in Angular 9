@@ -1,0 +1,9 @@
+//HTML
+
+<input   #fileInputId class="form-control"   type="file"   name="excel"  id="excel"  accept=".xlsx, .xls"    enctype="multipart/form-data"   (change)="handleFile($event.target.files)"  />
+
+//Type Script
+ @ViewChild("fileInputId") fileVariable: ElementRef;
+reset() { 
+    this.fileVariable.nativeElement.value = "";
+  }
