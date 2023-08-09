@@ -1,7 +1,7 @@
 //HTML
 
 <input   #fileInputId class="form-control"   type="file"   name="excel"  id="excel"  accept=".xlsx, .xls"    enctype="multipart/form-data"   (change)="handleFile($event.target.files)"  />
-
+  <button class="btn btn-danger" (click)="reset()">  <i class="fas fa-trash"></i> Reset</button
 //Type Script
  @ViewChild("fileInputId") fileVariable: ElementRef;
 reset() { 
