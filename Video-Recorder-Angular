@@ -1,0 +1,204 @@
+//HTML
+<div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-12 p-2 ml-5" >
+              <div
+                class="btn-group btn-group-sm flex-wrap"
+                role="group"
+                aria-label="video-record-btn-group"
+                style="font-weight:700;font-size: 17px;" >
+                <strong class="input-group-text" id="video-timer">{{
+                  videoRecordTimer
+                }}</strong>
+                <button
+                  (click)="startRecording()"
+                  [disabled]="mediaRecorder"
+                  class="btn btn-primary me-2"
+                >
+                  <i class="fa fa-play"></i>&nbsp;Start Recording
+                </button>
+                <button
+                  (click)="stopVideoRecording()"
+                  [disabled]="!mediaRecorder"
+                  class="btn btn-warning me-2"
+                >
+                  <i class="fa fa-stop"></i>&nbsp;Stop Recording
+                </button>
+                <button (click)="switchCamera()" class="btn btn-secondary ms-2">
+                  <i class="fa fa-camera"></i>&nbsp;Switch Camera</button
+                >&nbsp;
+                <button (click)="closeVideoModal()" class="btn btn-danger ms-2">
+                  <i class="fa fa-window-close"></i>&nbsp;Close</button
+                >&nbsp;
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <input
+                      type="checkbox"
+                      id="audioCapture"
+                      [disabled]="mediaRecorder"
+                      [(ngModel)]="audioCapture"
+                    />
+                  </div>
+                  <span class="input-group-text"
+                    >Audio Include</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12" [hidden]="!mediaRecorder">
+              <div class="d-flex justify-content-center">
+                <video
+                  #video
+                  class="custom-video-player w-100"
+                  autoplay
+                  muted
+                ></video>
+              </div>
+            </div>
+          </div>
+        </div>
+
+//Typescript
+
+@ViewChild("video") videoElement: ElementRef;
+  public mediaRecorder: MediaRecorder;
+  public recordedChunks: Blob[] = [];
+  public stream: MediaStream;
+  public selectedDevice: MediaDeviceInfo;
+  public audioCapture: boolean = true;
+  public recordedVideoUrl: string = "";
+  public recordingStartTime: number;
+  public recordingTimer: any;
+  public videoRecordTimer: string = "0:00";
+  async ngOnInit(): Promise<void> { 
+    await this.loadCameras();
+  }
+  async ngAfterViewInit() {
+    this.applyFadeInAnimation();
+    this.muteAudio();
+  }
+  muteAudio() {
+    this.videoElement.nativeElement.muted = true;
+  }
+
+  async openVideoModal() {
+    this.videoRecorderModal.show();
+  }
+
+  async loadCameras() {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    this.selectedDevice = devices.find(
+      (device) => device.kind === "videoinput"
+    );
+  }
+
+  async startRecording() {
+    try {
+      const constraints = {
+        video: {
+          deviceId: this.selectedDevice.deviceId,
+          width: { ideal: 640 },
+          height: { ideal: 360 },
+        },
+        audio: this.audioCapture,
+      };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      this.stream = stream;
+      this.videoElement.nativeElement.srcObject = stream;
+      this.mediaRecorder = new MediaRecorder(stream);
+
+      this.mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          this.recordedChunks.push(event.data);
+        }
+      };
+
+      this.mediaRecorder.onstop = () => {
+        const recordedBlob = new Blob(this.recordedChunks, {
+          type: "video/mp4",
+        });
+        this.recordedVideoUrl = URL.createObjectURL(recordedBlob);
+      };
+
+      this.recordingStartTime = new Date().getTime();
+      this.recordingTimer = setInterval(() => {
+        const currentTime = new Date().getTime();
+        const elapsedTime = Math.floor(
+          (currentTime - this.recordingStartTime) / 1000
+        );
+        this.updateTimer(elapsedTime);
+      }, 1000);
+
+      this.mediaRecorder.start();
+    } catch (error) {
+      this.notifyService.showWarning("Please Enable Camera Access!!", "");
+    }
+  }
+
+  stopVideoRecording() {
+    if (this.mediaRecorder) {
+      clearInterval(this.recordingTimer);
+      this.mediaRecorder.stop();
+      this.stream.getTracks().forEach((track) => track.stop());
+      setTimeout(() => this.saveRecordedVideo(), 2000);
+    }
+  }
+  updateTimer(seconds: number) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    this.videoRecordTimer = `${minutes}:${
+      remainingSeconds < 10 ? "0" : ""
+    }${remainingSeconds}`;
+  }
+
+  async switchCamera() {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const cameras = devices.filter((device) => device.kind === "videoinput");
+    const currentIndex = cameras.findIndex(
+      (camera) => camera.deviceId === this.selectedDevice.deviceId
+    );
+    const nextIndex = (currentIndex + 1) % cameras.length;
+    this.selectedDevice = cameras[nextIndex];
+  }
+
+  clearRecordedVideo() {
+    this.videoRecordTimer = "0:00";
+    this.recordedVideoUrl = "";
+  }
+
+  saveRecordedVideo() {
+    this.videoRecorderModal.hide();
+    console.log(this.recordedChunks.length);
+    if (this.recordedChunks.length > 0) {
+      const recordedBlob = new Blob(this.recordedChunks, {
+        type: "video/mp4",
+      });
+      const now = new Date();
+      const timestamp = now.toISOString().replace(/[:.]/g, "-");
+      const fileName = `VID_${timestamp}.mp4`;
+      const file = new File([recordedBlob], fileName, { type: "video/mp4" });
+      this.fileArray.push(file);
+      this.clearRecordedVideo();
+      this.recordedChunks = [];
+      this.mediaRecorder = null;
+    }
+  }
+
+  closeVideoModal() {
+    this.videoRecorderModal.hide();
+    this.abortVideoRecording();
+  }
+
+  abortVideoRecording() {
+    if (this.mediaRecorder) {
+      clearInterval(this.recordingTimer);
+      this.mediaRecorder.stop();
+      this.recordedChunks = [];
+      this.videoRecordTimer = "0:00";
+      this.recordedVideoUrl = "";
+      this.mediaRecorder = null;
+    }
+  }
+  applyFadeInAnimation() {
+    this.videoElement.nativeElement.classList.add("fade-in");
+  }
